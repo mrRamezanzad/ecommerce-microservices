@@ -18,6 +18,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/order/tsconfig.app.json"
       }
+    },
+    "discount": {
+      "type": "application",
+      "root": "apps/discount",
+      "entryFile": "main",
+      "sourceRoot": "apps/discount/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/discount/tsconfig.app.json"
+      }
     }
   }
 }
