@@ -11,7 +11,9 @@ import { DiscountService } from './discount.service';
 import { CreateDiscountDto } from './dtos/createDiscount.dto';
 import { Coupon } from './entity/coupon.entity';
 import { UpdateDiscountDto } from './dtos/updateDiscount.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('discount')
 @Controller('discounts')
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
