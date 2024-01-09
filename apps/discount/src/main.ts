@@ -13,7 +13,10 @@ async function bootstrap() {
   const isProduction = process.env.NODE_ENV === "production"
   if (!isProduction) {
     await schemaGenerator.dropSchema();
+    Logger.warn('Schema dropped', 'Database');
+    
     await schemaGenerator.createSchema();
+    Logger.warn('Schema created', 'Database');
 
   } else {
     Logger.warn(await schemaGenerator.getUpdateSchemaSQL({

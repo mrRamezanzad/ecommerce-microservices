@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { DiscountController } from './discount.controller';
 import { DiscountService } from './discount.service';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MikroOrmModule.forRoot({
       autoLoadEntities: true,
       dbName: process.env.DATABASE_NAME,
@@ -13,6 +15,10 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
       type: 'postgresql',
       discovery: { warnWhenNoEntities: false }
     }),
+    MikroOrmModule.forFeature({
+      entities: []
+    }),
+  ],
   controllers: [DiscountController],
   providers: [DiscountService],
 })
