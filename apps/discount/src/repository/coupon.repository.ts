@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ICoupon } from '../entity/coupon.entity.interface';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Coupon } from '../entity/coupon.entity';
@@ -6,6 +6,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { CreateDiscountDto } from '../dtos/createDiscount.dto';
 import { ICouponRepository } from './coupon.repository.interface';
 import { UpdateDiscountDto } from '../dtos/updateDiscount.dto';
+import { wrap } from '@mikro-orm/core';
 
 @Injectable()
 export class CouponRepository implements ICouponRepository {
@@ -16,21 +17,66 @@ export class CouponRepository implements ICouponRepository {
   ) {}
 
   async getDiscount(productName: string): Promise<ICoupon> {
-    return;
+    try {
+      const couponEntity = await this.couponRepository.findOne({ productName });
+
+      if (!couponEntity) {
+        throw new BadRequestException();
+      }
+
+      return couponEntity;
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
   async createDiscount(coupon: CreateDiscountDto): Promise<ICoupon> {
-    const couponEntity = this.couponRepository.create(coupon);
-    
-    this.entityManager.persist(couponEntity).flush();
-    return couponEntity;
+    try {
+      let couponEntity = await this.couponRepository.findOne({
+        productName: coupon.productName,
+      });
+
+      if (!couponEntity) {
+        couponEntity = this.couponRepository.create(coupon);
+        await this.entityManager.persist(couponEntity).flush();
+      }
+
+      return couponEntity;
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
-  updateDiscount(coupon: UpdateDiscountDto): boolean | Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async updateDiscount(coupon: UpdateDiscountDto): Promise<boolean> {
+    try {
+      const couponEntity = await this.couponRepository.findOne({
+        id: coupon.id,
+      });
+
+      if (!couponEntity) {
+        throw new BadRequestException();
+      }
+
+      wrap(couponEntity).assign(coupon);
+      await this.entityManager.persist(couponEntity).flush();
+      return couponEntity && true;
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
-  deleteDiscount(productName: string): boolean | Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async deleteDiscount(productName: string): Promise<boolean> {
+    try {
+      const couponEntity = await this.couponRepository.findOne({ productName });
+
+      if (!couponEntity) {
+        throw new BadRequestException();
+      }
+
+      this.entityManager.removeAndFlush(couponEntity);
+      return couponEntity && true;
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 }
