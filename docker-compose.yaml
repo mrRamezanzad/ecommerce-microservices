@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:16.1-alpine3.18
+    restart: always
+    volumes:
+      - ./apps/discount/src/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/
+    ports:
+      - '5432:5432'
+    networks:
+      - discount
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+networks:
+  discount:
