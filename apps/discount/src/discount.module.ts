@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { DiscountController } from './discount.controller';
 import { DiscountService } from './discount.service';
+import { CouponRepository } from './repository/coupon.repository';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Coupon } from './entity/coupon.entity';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -13,13 +15,13 @@ import { ConfigModule } from '@nestjs/config';
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       type: 'postgresql',
-      discovery: { warnWhenNoEntities: false }
+      discovery: { warnWhenNoEntities: false },
     }),
     MikroOrmModule.forFeature({
-      entities: []
+      entities: [Coupon],
     }),
   ],
   controllers: [DiscountController],
-  providers: [DiscountService],
+  providers: [CouponRepository, DiscountService],
 })
 export class DiscountModule {}

@@ -1,13 +1,21 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { DiscountService } from './discount.service';
-import { ICoupon } from './entity/coupon.entity.interface';
+import { CreateDiscountDto } from './dtos/createDiscount.dto';
+import { Coupon } from './entity/coupon.entity';
 
 @Controller('discounts')
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
 
+  @Post()
+  createDiscount(
+    @Body() createDiscountDto: CreateDiscountDto,
+  ): Promise<Coupon> {
+    return this.discountService.create(createDiscountDto);
+  }
+
   @Get(':productName')
-  getDiscount(@Param('productName') productName: string): Promise<ICoupon> {
+  getDiscount(@Param('productName') productName: string): Promise<Coupon> {
     return this.discountService.getDiscount(productName);
   }
 }

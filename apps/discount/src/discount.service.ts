@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { ICoupon } from './entity/coupon.entity.interface';
-import { ICouponRepository } from './repository/coupon.repository.interface';
+import { CouponRepository } from './repository/coupon.repository';
+import { CreateDiscountDto } from './dtos/createDiscount.dto';
+import { Coupon } from './entity/coupon.entity';
 
 @Injectable()
 export class DiscountService {
-  constructor(private readonly couponRepository: ICouponRepository) {}
+  constructor(private readonly couponRepository: CouponRepository) {}
 
-  async getDiscount(productName: string): Promise<ICoupon> {
+  async create(createDiscountDto: CreateDiscountDto): Promise<Coupon> {
+    return this.couponRepository.createDiscount(createDiscountDto);
+  }
+
+  async getDiscount(productName: string): Promise<Coupon> {
     return this.couponRepository.getDiscount(productName);
   }
 }
