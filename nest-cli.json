@@ -25,7 +25,15 @@
       "entryFile": "main",
       "sourceRoot": "apps/discount/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/discount/tsconfig.app.json"
+        "tsConfigPath": "apps/discount/tsconfig.app.json",
+        "plugins": [
+          {
+            "name": "@nestjs/swagger",
+            "options": {
+              "introspectComments": true
+            }
+          }
+        ]
       }
     }
   }
