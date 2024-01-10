@@ -35,6 +35,15 @@
           }
         ]
       }
+    },
+    "discount.grpc": {
+      "type": "application",
+      "root": "apps/discount/grpc",
+      "entryFile": "main",
+      "sourceRoot": "apps/discount/grpc/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/discount/grpc/tsconfig.app.json"
+      }
     }
   }
 }
