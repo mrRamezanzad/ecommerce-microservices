@@ -39,10 +39,21 @@
     "discount.grpc": {
       "type": "application",
       "root": "apps/discount/grpc",
-      "entryFile": "main",
-      "sourceRoot": "apps/discount/grpc/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/discount/grpc/tsconfig.app.json"
+        "tsConfigPath": "apps/discount/grpc/tsconfig.app.json",
+        "watchAssets": true,
+        "assets": ["./proto/*.proto"]
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     }
   }
