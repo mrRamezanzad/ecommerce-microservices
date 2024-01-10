@@ -33,7 +33,7 @@ export class DiscountController {
   @Patch()
   updateDiscount(
     @Body() updateDiscountDto: UpdateDiscountDto,
-  ): Promise<boolean> {
+  ): Promise<Coupon> {
     return this.discountService.updateDiscount(updateDiscountDto);
   }
 

@@ -19,13 +19,13 @@
         "tsConfigPath": "apps/order/tsconfig.app.json"
       }
     },
-    "discount": {
+    "discount.api": {
       "type": "application",
-      "root": "apps/discount",
+      "root": "apps/discount/api",
       "entryFile": "main",
-      "sourceRoot": "apps/discount/src",
+      "sourceRoot": "apps/discount/api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/discount/tsconfig.app.json",
+        "tsConfigPath": "apps/discount/api/tsconfig.app.json",
         "plugins": [
           {
             "name": "@nestjs/swagger",

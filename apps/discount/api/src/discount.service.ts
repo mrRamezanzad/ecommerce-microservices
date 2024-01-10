@@ -16,7 +16,7 @@ export class DiscountService {
     return this.couponRepository.getDiscount(productName);
   }
 
-  async updateDiscount(updateDiscountDto: UpdateDiscountDto): Promise<boolean> {
+  async updateDiscount(updateDiscountDto: UpdateDiscountDto): Promise<Coupon> {
     return this.couponRepository.updateDiscount(updateDiscountDto);
   }
 

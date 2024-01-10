@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ICoupon } from '../entity/coupon.entity.interface';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Coupon } from '../entity/coupon.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
@@ -16,7 +15,7 @@ export class CouponRepository implements ICouponRepository {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async getDiscount(productName: string): Promise<ICoupon> {
+  async getDiscount(productName: string): Promise<Coupon> {
     try {
       const couponEntity = await this.couponRepository.findOne({ productName });
 
@@ -30,7 +29,7 @@ export class CouponRepository implements ICouponRepository {
     }
   }
 
-  async createDiscount(coupon: CreateDiscountDto): Promise<ICoupon> {
+  async createDiscount(coupon: CreateDiscountDto): Promise<Coupon> {
     try {
       let couponEntity = await this.couponRepository.findOne({
         productName: coupon.productName,
@@ -47,7 +46,7 @@ export class CouponRepository implements ICouponRepository {
     }
   }
 
-  async updateDiscount(coupon: UpdateDiscountDto): Promise<boolean> {
+  async updateDiscount(coupon: UpdateDiscountDto): Promise<Coupon> {
     try {
       const couponEntity = await this.couponRepository.findOne({
         id: coupon.id,
@@ -59,7 +58,7 @@ export class CouponRepository implements ICouponRepository {
 
       wrap(couponEntity).assign(coupon);
       await this.entityManager.persist(couponEntity).flush();
-      return couponEntity && true;
+      return couponEntity;
     } catch (err) {
       throw new BadRequestException();
     }
