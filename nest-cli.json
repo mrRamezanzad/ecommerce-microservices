@@ -44,7 +44,9 @@
       "compilerOptions": {
         "tsConfigPath": "apps/discount/grpc/tsconfig.app.json",
         "watchAssets": true,
-        "assets": ["./proto/*.proto"]
+        "assets": [
+          "./proto/*.proto"
+        ]
       }
     },
     "common": {
@@ -54,6 +56,15 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "catalog": {
+      "type": "application",
+      "root": "apps/catalog",
+      "entryFile": "main",
+      "sourceRoot": "apps/catalog/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/catalog/tsconfig.app.json"
       }
     }
   }
