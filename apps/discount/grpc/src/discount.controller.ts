@@ -1,5 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
-import { DiscountService } from './discount.service';
+import { Controller } from '@nestjs/common';
 import {
   Coupon,
   CreateDiscountRequest,
@@ -10,6 +9,7 @@ import {
   GetDiscountRequest,
   UpdateDiscountRequest,
 } from '@app/common';
+import { DiscountService } from './discount.service';
 
 @Controller()
 @DiscountServiceControllerMethods()
@@ -17,20 +17,28 @@ export class DiscountController implements DiscountServiceController {
   constructor(private readonly discountService: DiscountService) {}
 
   getDiscount(request: GetDiscountRequest): Coupon | Promise<Coupon> {
-    throw new Error('Method not implemented.');
+    return this.discountService.getDiscount(request.productName);
   }
 
   createDiscount(request: CreateDiscountRequest): Coupon | Promise<Coupon> {
-    throw new Error('Method not implemented.');
+    return this.discountService.create({
+      ...request,
+      amount: parseInt(request.amount.toString()),
+    });
   }
 
   updateDiscount(request: UpdateDiscountRequest): Coupon | Promise<Coupon> {
-    throw new Error('Method not implemented.');
+    return this.discountService.updateDiscount(request);
   }
 
-  deleteDiscount(
+  async deleteDiscount(
     request: DeleteDiscountRequest,
-  ): DeleteDiscountResponse | Promise<DeleteDiscountResponse> {
-    throw new Error('Method not implemented.');
+  ): Promise<DeleteDiscountResponse> {
+    const success = await this.discountService.deleteDiscount(
+      request.productName,
+    );
+    return {
+      success,
+    };
   }
 }
