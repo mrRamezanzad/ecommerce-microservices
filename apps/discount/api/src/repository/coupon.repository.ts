@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Coupon } from '../entity/coupon.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { CreateDiscountDto } from '../dtos/createDiscount.dto';
@@ -8,16 +7,17 @@ import { UpdateDiscountDto } from '../dtos/updateDiscount.dto';
 import { wrap } from '@mikro-orm/core';
 
 @Injectable()
-export class CouponRepository implements ICouponRepository {
-  constructor(
-    @InjectRepository(Coupon)
-    private readonly couponRepository: EntityRepository<Coupon>,
-    private readonly entityManager: EntityManager,
-  ) {}
+export class CouponRepository
+  extends EntityRepository<Coupon>
+  implements ICouponRepository
+{
+  constructor(private readonly globalEntityManager: EntityManager) {
+    super(globalEntityManager.fork(), Coupon.name);
+  }
 
   async getDiscount(productName: string): Promise<Coupon> {
     try {
-      const couponEntity = await this.couponRepository.findOne({ productName });
+      const couponEntity = await this.findOne({ productName });
 
       if (!couponEntity) {
         throw new BadRequestException();
@@ -31,13 +31,13 @@ export class CouponRepository implements ICouponRepository {
 
   async createDiscount(coupon: CreateDiscountDto): Promise<Coupon> {
     try {
-      let couponEntity = await this.couponRepository.findOne({
+      let couponEntity = await this.findOne({
         productName: coupon.productName,
       });
 
       if (!couponEntity) {
-        couponEntity = this.couponRepository.create(coupon);
-        await this.entityManager.persist(couponEntity).flush();
+        couponEntity = this.create(coupon);
+        await this.globalEntityManager.persist(couponEntity).flush();
       }
 
       return couponEntity;
@@ -48,7 +48,7 @@ export class CouponRepository implements ICouponRepository {
 
   async updateDiscount(coupon: UpdateDiscountDto): Promise<Coupon> {
     try {
-      const couponEntity = await this.couponRepository.findOne({
+      const couponEntity = await this.findOne({
         id: coupon.id,
       });
 
@@ -57,7 +57,7 @@ export class CouponRepository implements ICouponRepository {
       }
 
       wrap(couponEntity).assign(coupon);
-      await this.entityManager.persist(couponEntity).flush();
+      await this.globalEntityManager.persist(couponEntity).flush();
       return couponEntity;
     } catch (err) {
       throw new BadRequestException();
@@ -66,13 +66,13 @@ export class CouponRepository implements ICouponRepository {
 
   async deleteDiscount(productName: string): Promise<boolean> {
     try {
-      const couponEntity = await this.couponRepository.findOne({ productName });
+      const couponEntity = await this.findOne({ productName });
 
       if (!couponEntity) {
         throw new BadRequestException();
       }
 
-      this.entityManager.removeAndFlush(couponEntity);
+      this.globalEntityManager.removeAndFlush(couponEntity);
       return couponEntity && true;
     } catch (err) {
       throw new BadRequestException();
