@@ -1,5 +1,15 @@
 version: '3.9'
 services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - '27017:27017'
+    networks:
+      - catalog
 
   postgres:
     container_name: postgres
@@ -17,4 +27,5 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 networks:
+  catalog:
   discount:
