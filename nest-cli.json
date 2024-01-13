@@ -44,9 +44,7 @@
       "compilerOptions": {
         "tsConfigPath": "apps/discount/grpc/tsconfig.app.json",
         "watchAssets": true,
-        "assets": [
-          "./proto/*.proto"
-        ]
+        "assets": ["./proto/*.proto"]
       }
     },
     "common": {
@@ -64,7 +62,15 @@
       "entryFile": "main",
       "sourceRoot": "apps/catalog/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/catalog/tsconfig.app.json"
+        "tsConfigPath": "apps/catalog/tsconfig.app.json",
+        "plugins": [
+          {
+            "name": "@nestjs/swagger",
+            "options": {
+              "introspectComments": true
+            }
+          }
+        ]
       }
     }
   }
