@@ -44,7 +44,7 @@ export class Product {
   imageFile?: string;
 
   @Prop({
-    type: String,
+    type: Number,
     required: true,
   })
   price: number;
