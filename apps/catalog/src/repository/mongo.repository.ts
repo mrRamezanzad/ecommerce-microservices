@@ -42,7 +42,7 @@ export abstract class MongoRepository<T> {
 
   public deleteOne(
     filter: FilterQuery<T>,
-    options: DeleteOptions,
+    options?: DeleteOptions,
   ): Promise<DeleteResult> {
     return this.model.deleteOne(filter, options);
   }
