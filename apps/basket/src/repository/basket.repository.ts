@@ -1,18 +1,26 @@
+import { Injectable } from '@nestjs/common';
 import { ShoppingCart } from '../entity/shoppingCart.entity';
 import { IBasketRespiroty } from './interfaces/basketRepository.interface';
+import { InjectRedis } from '@nestjs-modules/ioredis';
+import { Redis } from 'ioredis';
 
+@Injectable()
 export class BasketRepository implements IBasketRespiroty {
-  constructor(private readonly _db) {}
+  constructor(@InjectRedis() private readonly db: Redis) {}
 
-  getBasket(username: string): ShoppingCart | Promise<ShoppingCart> {
-    throw new Error('Method not implemented.');
+  async getBasket(username: string): Promise<ShoppingCart> {
+    return JSON.parse(await this.db.get(username));
   }
 
-  updateBasket(basket: ShoppingCart): ShoppingCart | Promise<ShoppingCart> {
-    throw new Error('Method not implemented.');
+  async updateBasket(basket: ShoppingCart): Promise<ShoppingCart> {
+    await this.db.set(basket.username, JSON.stringify(basket));
+
+    const basketInDb = await this.db.get(basket.username);
+    return JSON.parse(basketInDb);
   }
 
-  deleteBasket(username: string): boolean | Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async deleteBasket(username: string): Promise<boolean> {
+    const result = await this.db.del(username);
+    return result > 0;
   }
 }
