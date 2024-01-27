@@ -87,7 +87,9 @@
               "introspectComments": true
             }
           }
-        ]
+        ],
+        "watchAssets": true,
+        "assets": ["./proto/*.proto"]
       }
     }
   }
