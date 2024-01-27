@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Coupon } from '../entity/coupon.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { ICouponRepository } from './coupon.repository.interface';
 import { wrap } from '@mikro-orm/core';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class CouponRepository
@@ -18,12 +19,12 @@ export class CouponRepository
       const couponEntity = await this.findOne({ productName });
 
       if (!couponEntity) {
-        throw new BadRequestException();
+        throw new RpcException(`Not found coupon with name: ${productName}`);
       }
 
       return couponEntity;
     } catch (err) {
-      throw new BadRequestException();
+      throw new RpcException(err);
     }
   }
 
@@ -40,7 +41,7 @@ export class CouponRepository
 
       return couponEntity;
     } catch (err) {
-      throw new BadRequestException(err);
+      throw new RpcException(err);
     }
   }
 
@@ -51,14 +52,14 @@ export class CouponRepository
       });
 
       if (!couponEntity) {
-        throw new BadRequestException();
+        throw new RpcException(`Not found coupon with Id: ${coupon.id}`);
       }
 
       wrap(couponEntity).assign(coupon);
       await this.em.persist(couponEntity).flush();
       return couponEntity;
     } catch (err) {
-      throw new BadRequestException();
+      throw new RpcException(err);
     }
   }
 
@@ -67,13 +68,13 @@ export class CouponRepository
       const couponEntity = await this.findOne({ productName });
 
       if (!couponEntity) {
-        throw new BadRequestException();
+        throw new RpcException(`Not found coupon with name: ${productName}`);
       }
 
       this.em.removeAndFlush(couponEntity);
       return couponEntity && true;
     } catch (err) {
-      throw new BadRequestException();
+      throw new RpcException(err);
     }
   }
 }
