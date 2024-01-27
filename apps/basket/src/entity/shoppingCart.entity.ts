@@ -1,6 +1,10 @@
 import { ShoppingCartItem } from './shoppingCartItem.entity';
 
 export class ShoppingCart {
+  constructor(username?: string) {
+    this.username = username;
+  }
+
   username: string;
 
   items: ShoppingCartItem[] = [];
