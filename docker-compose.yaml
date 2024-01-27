@@ -1,5 +1,13 @@
 version: '3.9'
 services:
+  redis:
+    container_name: redis
+    image: redis:7.2.1
+    ports:
+      - '6379:6379'
+    networks:
+      - basket
+
   mongodb:
     container_name: mongodb
     image: mongo:7
@@ -27,5 +35,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 networks:
+  basket:
   catalog:
   discount:
