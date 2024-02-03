@@ -27,8 +27,8 @@ export class Guard {
   ): IGuardResult {
     for (const arg of args) {
       const result = this.againstNullOrUndefined(
-        arg.argumentName,
         arg.argument,
+        arg.argumentName,
       );
 
       if (!result.succeeded) {
@@ -65,7 +65,7 @@ export class Guard {
     max: number,
     argumentName: string,
   ): IGuardResult {
-    const isInRange = number >= min && number >= max;
+    const isInRange = number >= min && number <= max;
 
     if (!isInRange) {
       return {
