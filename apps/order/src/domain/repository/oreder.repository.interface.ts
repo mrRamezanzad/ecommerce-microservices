@@ -1,5 +1,3 @@
-import { Order } from '../entity/order';
-
-export interface IOrderRepository {
-  getOrdersByUsername(username: string): Order[];
+export interface IOrderRepository<TResult> {
+  getOrdersByUsername(username: string): TResult[] | Promise<TResult[]>;
 }
