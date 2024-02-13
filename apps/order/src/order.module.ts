@@ -2,9 +2,13 @@ import { Module } from '@nestjs/common';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { OrderRepository } from './infrustructure/typeorm/repository/order.repository';
+import { Order } from './infrustructure/typeorm/entity/order.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.MYSQL_ADDRESS,
@@ -15,8 +19,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV === 'development' && true,
     }),
+    TypeOrmModule.forFeature([Order]),
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, OrderRepository],
 })
 export class OrderModule {}

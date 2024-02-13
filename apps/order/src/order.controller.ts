@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { OrderService } from './order.service';
+import { ApiTags } from '@nestjs/swagger';
+import { Order as OrderSchema } from './infrustructure/typeorm/entity/order.entity';
 
-@Controller()
+@ApiTags('order')
+@Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Get()
-  getHello(): string {
-    return this.orderService.getHello();
+  @Get(':username')
+  getOrdersByUserName(
+    @Param('username') username: string,
+  ): Promise<OrderSchema[]> {
+    return this.orderService.getOrdersByUserName(username);
   }
 }
